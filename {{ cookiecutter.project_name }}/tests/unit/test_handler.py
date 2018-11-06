@@ -3,7 +3,7 @@ import pytest
 from first_function import app
 import os
 
-{ % if cookiecutter.include_apigw == "y" %}
+{% if cookiecutter.include_apigw == "y" %}
 
 @pytest.fixture()
 def apigw_event():
@@ -92,7 +92,7 @@ def test_lambda_handler(apigw_event):
     assert ret['body'] == json.dumps({'hello': 'world'})
 
 
-{ % else %}
+{% else %}
 
 @pytest.fixture()
 def lambda_event():
@@ -133,8 +133,6 @@ def test_get_message(apigw_event, key, value):
     assert ret['body'] == json.dumps({key: value})
 
 
-{ % else %}
-
 @pytest.fixture()
 def lambda_event():
     """ Generates Lambda Event"""
@@ -170,8 +168,6 @@ def test_runs_on_aws_lambda(apigw_event):
     assert ret['body'] == json.dumps({'hello': 'world'})
 
 
-{ % else %}
-
 @pytest.fixture()
 def lambda_event():
     """ Generates Lambda Event"""
@@ -182,3 +178,4 @@ def lambda_event():
 def test_lambda_handler(lambda_event):
     ret = 'AWS_SAM_LOCAL' not in os.environ and 'LAMBDA_TASK_ROOT' in os.environ
     assert ret == True
+{% endif %}
